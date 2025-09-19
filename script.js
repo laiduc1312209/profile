@@ -1,3 +1,31 @@
+
+document.addEventListener("contextmenu", function(e) {
+    e.preventDefault();
+});
+
+document.addEventListener("keydown", function(e) {
+
+    if (e.ctrlKey && e.key.toLowerCase() === "u") {
+        e.preventDefault();
+    }
+
+
+    if (e.ctrlKey && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+    }
+
+
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") {
+        e.preventDefault();
+    }
+
+    if (e.key === "F12") {
+        e.preventDefault();
+    }
+});
+
+
+
 const audio = document.getElementById("bgMusic");
 const volumeIcon = document.getElementById("volumeIcon");
 const volumeControl = document.getElementById("volumeControl");
@@ -43,21 +71,21 @@ updateClock();
 
 const titleText = "p l d 1 3 1 2 - L a i D u c";
 let direction = 1;
-let i = 0; // <-- Initialize the counter
+let i = 0; 
 
 function animateTitle() {
   if (direction === 1) {
     i++;
     if (i > titleText.length) {
       direction = -1;
-      setTimeout(animateTitle, 1000); // pause at full text
+      setTimeout(animateTitle, 1000); 
       return;
     }
   } else {
     i--;
     if (i < 0) {
       direction = 1;
-      setTimeout(animateTitle, 500); // pause at empty text
+      setTimeout(animateTitle, 500);
       return;
     }
   }
@@ -67,3 +95,4 @@ function animateTitle() {
 }
 
 animateTitle();
+
