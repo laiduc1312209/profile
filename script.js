@@ -43,21 +43,21 @@ updateClock();
 
 const titleText = "p l d 1 3 1 2 - L a i D u c";
 let direction = 1;
+let i = 0; // <-- Initialize the counter
 
 function animateTitle() {
   if (direction === 1) {
     i++;
     if (i > titleText.length) {
       direction = -1;
-      setTimeout(animateTitle, 1000);
+      setTimeout(animateTitle, 1000); // pause at full text
       return;
     }
   } else {
-
     i--;
     if (i < 0) {
       direction = 1;
-      setTimeout(animateTitle, 500);
+      setTimeout(animateTitle, 500); // pause at empty text
       return;
     }
   }
