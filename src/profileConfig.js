@@ -13,6 +13,9 @@ export const profileConfig = {
   // Avatar / Logo: Sử dụng file logo từ public/logo.png
   avatar: "/logo.png",
 
+  // Nhạc nền YouTube (ID bài hát: https://www.youtube.com/watch?v=bbdsIR4UHDg)
+  youtubeMusicId: "bbdsIR4UHDg",
+
   // Trạng thái hiện tại
   status: {
     available: true,

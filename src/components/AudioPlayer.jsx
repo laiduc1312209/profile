@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX, Play, Pause, Music } from 'lucide-react';
+import { profileConfig } from '../profileConfig';
 
 export default function AudioPlayer({ isStarted, onInitPlayer }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -22,17 +23,19 @@ export default function AudioPlayer({ isStarted, onInitPlayer }) {
   useEffect(() => {
     if (!isStarted) return;
 
+    const videoId = profileConfig.youtubeMusicId || 'bbdsIR4UHDg';
+
     const startAudio = () => {
       if (window.YT && window.YT.Player) {
         if (!playerRef.current) {
           playerRef.current = new window.YT.Player('youtube-audio-player', {
             height: '0',
             width: '0',
-            videoId: 'KypuJGsZ8pQ',
+            videoId: videoId,
             playerVars: {
               autoplay: 1,
               loop: 1,
-              playlist: 'KypuJGsZ8pQ',
+              playlist: videoId,
               controls: 0,
               playsinline: 1,
             },
