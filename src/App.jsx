@@ -11,6 +11,7 @@ export default function App() {
   const { name, handle, role, bio, avatar, tags, socialLinks } = profileConfig;
   const [copiedLink, setCopiedLink] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [isAudioActive, setIsAudioActive] = useState(false);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -62,10 +63,13 @@ export default function App() {
       </AnimatePresence>
 
       {/* 2. Audio Controller & Trình phát nhạc nền YouTube */}
-      <AudioPlayer isStarted={isStarted} />
+      <AudioPlayer 
+        isStarted={isStarted} 
+        onAudioStateChange={(state) => setIsAudioActive(state.isAudioActive)}
+      />
 
-      {/* 3. Lưới ô vuông tương tác phủ toàn màn hình (Hover đổi màu trắng) */}
-      <InteractiveGrid />
+      {/* 3. Lưới ô vuông tương tác phủ toàn màn hình (Hover đổi màu trắng & sóng nhạc nền) */}
+      <InteractiveGrid isAudioActive={isAudioActive} />
 
       {/* 4. Ánh sáng nền khuếch tán cực nhẹ (Chủ đạo trắng, điểm xuyết tím) */}
       <div 

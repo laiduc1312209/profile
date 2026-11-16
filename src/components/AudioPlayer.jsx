@@ -2,12 +2,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX, Play, Pause, Music } from 'lucide-react';
 import { profileConfig } from '../profileConfig';
 
-export default function AudioPlayer({ isStarted, onInitPlayer }) {
+export default function AudioPlayer({ isStarted, onAudioStateChange }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(70);
   const [isMuted, setIsMuted] = useState(false);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const playerRef = useRef(null);
+
+  // Báo cáo trạng thái phát nhạc ra ngoài component cha (App.jsx)
+  useEffect(() => {
+    if (onAudioStateChange) {
+      onAudioStateChange({
+        isPlaying,
+        isMuted,
+        volume,
+        isAudioActive: isPlaying && !isMuted && volume > 0,
+      });
+    }
+  }, [isPlaying, isMuted, volume, onAudioStateChange]);
 
   useEffect(() => {
     // Tải YouTube IFrame API
