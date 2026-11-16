@@ -118,16 +118,16 @@ export default function SocialCard({ link, index }) {
           rotateY: rotateYSpring,
           transformStyle: "preserve-3d",
         }}
-        className="relative rounded-2xl p-[1px] transition-shadow duration-300 group-hover:shadow-[0_15px_35px_rgba(0,0,0,0.8),_0_0_25px_rgba(255,255,255,0.12)]"
+        className="relative rounded-2xl p-[1px] transition-shadow duration-300 group-hover:shadow-[0_15px_35px_rgba(0,0,0,0.4)]"
       >
-        {/* Lớp viền phản quang trắng sáng */}
-        <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-white/20 via-white/40 to-white/20 opacity-40 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+        {/* Lớp viền phản quang */}
+        <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-[var(--topbar-border)] via-[var(--card-border-hover)] to-[var(--topbar-border)] opacity-30 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
 
         {/* Dynamic Holographic Glare Sheen across the glass surface */}
         <motion.div
-          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-300 z-20"
+          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-20"
           style={{
-            background: `radial-gradient(circle 200px at ${glareX} ${glareY}, rgba(255, 255, 255, 0.25), transparent 70%)`,
+            background: `radial-gradient(circle 200px at ${glareX} ${glareY}, var(--card-sheen), transparent 70%)`,
           }}
         />
 
@@ -137,13 +137,13 @@ export default function SocialCard({ link, index }) {
           target={link.isEmail ? "_self" : "_blank"}
           rel={link.isEmail ? undefined : "noopener noreferrer"}
           style={{ transform: "translateZ(0px)" }}
-          className="relative flex items-center justify-between w-full p-4 rounded-2xl bg-[#0c0c12]/95 backdrop-blur-2xl border border-white/25 group-hover:border-white shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white z-10"
+          className="relative flex items-center justify-between w-full p-4 rounded-2xl bg-[var(--card-bg)] backdrop-blur-2xl border border-[var(--card-border)] group-hover:border-[var(--card-border-hover)] shadow-[0_8px_24px_rgba(0,0,0,0.15)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--card-border-hover)] z-10"
         >
           <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
-            {/* 3D Elevated Icon with high-contrast white hover */}
+            {/* 3D Elevated Icon with high-contrast hover */}
             <div
               style={{ transform: "translateZ(24px)" }}
-              className="flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-xl bg-zinc-900 border border-white/20 text-white shadow-sm group-hover:bg-white group-hover:text-black group-hover:border-white group-hover:scale-105 transition-all duration-300"
+              className="flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-xl bg-[var(--icon-bg)] border border-[var(--icon-border)] text-[var(--icon-text)] shadow-sm group-hover:bg-[var(--text-primary)] group-hover:text-[var(--bg-color)] group-hover:border-[var(--card-border-hover)] group-hover:scale-105 transition-all duration-300"
             >
               <IconComponent className="w-5 h-5 transition-transform duration-300" />
             </div>
@@ -153,10 +153,10 @@ export default function SocialCard({ link, index }) {
               style={{ transform: "translateZ(16px)" }}
               className="text-left min-w-0 transition-transform duration-300"
             >
-              <h2 className="font-semibold text-[15px] text-white group-hover:text-white transition-colors duration-200 truncate">
+              <h2 className="font-semibold text-[15px] text-[var(--text-primary)] transition-colors duration-200 truncate">
                 {link.title}
               </h2>
-              <p className="text-xs text-zinc-400 group-hover:text-zinc-200 transition-colors duration-200 mt-0.5 truncate">
+              <p className="text-xs text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors duration-200 mt-0.5 truncate">
                 {link.handle}
               </p>
             </div>
@@ -173,7 +173,7 @@ export default function SocialCard({ link, index }) {
                 type="button"
                 onClick={handleCopy}
                 title={link.id === 'discord' ? "Sao chép username Discord" : "Sao chép địa chỉ email"}
-                className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/20 active:scale-95 transition-all duration-200"
+                className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] border border-transparent hover:border-[var(--icon-border)] active:scale-95 transition-all duration-200"
               >
                 {copied ? (
                   <Check className="w-4 h-4 text-emerald-400" />
@@ -184,7 +184,7 @@ export default function SocialCard({ link, index }) {
             )}
 
             {/* Trailing Arrow */}
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 group-hover:text-white transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
               <ArrowUpRight className="w-4 h-4" />
             </div>
           </div>

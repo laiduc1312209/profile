@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { profileConfig } from './profileConfig';
 import Avatar from './components/Avatar';
 import SocialCard from './components/SocialCard';
 import InteractiveGrid from './components/InteractiveGrid';
 import AudioPlayer from './components/AudioPlayer';
+import ThemeSwitcher from './components/ThemeSwitcher';
 import { Share2, Check, Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -12,6 +13,14 @@ export default function App() {
   const [copiedLink, setCopiedLink] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [isAudioActive, setIsAudioActive] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('user-theme') || 'violet-dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('user-theme', theme);
+  }, [theme]);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -20,7 +29,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen text-[#f4f4f5] flex flex-col items-center justify-between px-4 py-12 sm:py-16 selection:bg-white/20 selection:text-white overflow-x-hidden">
+    <div className="relative min-h-screen text-[var(--text-primary)] flex flex-col items-center justify-between px-4 py-12 sm:py-16 selection:bg-[var(--text-accent)]/20 selection:text-[var(--text-primary)] overflow-x-hidden transition-colors duration-300">
       {/* 1. Màn hình Intro khởi động (Click to continue) */}
       <AnimatePresence>
         {!isStarted && (
@@ -36,9 +45,9 @@ export default function App() {
             <motion.div
               layoutId="main-logo-container"
               transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-              className="relative p-2 rounded-full bg-[#111116] border border-white/30 shadow-[0_20px_50px_rgba(0,0,0,0.8),_0_0_35px_rgba(255,255,255,0.15)] backdrop-blur-xl group hover:scale-105 transition-transform"
+              className="relative p-2 rounded-full bg-[var(--card-bg)] border border-[var(--topbar-border)] shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl group hover:scale-105 transition-transform"
             >
-              <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden bg-[#0d0d12] flex items-center justify-center">
+              <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden bg-[var(--icon-bg)] flex items-center justify-center">
                 <img
                   src={avatar}
                   alt={name}
@@ -47,15 +56,18 @@ export default function App() {
               </div>
             </motion.div>
 
-            {/* Dòng chữ Click to continue */}
+            {/* Dòng chữ Click to continue & Khuyến nghị */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25, duration: 0.5 }}
-              className="mt-6 flex flex-col items-center"
+              className="mt-6 flex flex-col items-center gap-1.5"
             >
-              <span className="text-sm font-semibold tracking-widest uppercase font-mono text-white/90 animate-pulse">
+              <span className="text-sm font-semibold tracking-widest uppercase font-mono text-[var(--text-primary)] animate-pulse">
                 Click to continue
+              </span>
+              <span className="text-xs text-[var(--text-secondary)] font-mono tracking-wide">
+                Use a computer for the best experience
               </span>
             </motion.div>
           </motion.div>
@@ -68,30 +80,32 @@ export default function App() {
         onAudioStateChange={(state) => setIsAudioActive(state.isAudioActive)}
       />
 
-      {/* 3. Lưới ô vuông tương tác phủ toàn màn hình (Hover đổi màu trắng & sóng nhạc nền) */}
-      <InteractiveGrid isAudioActive={isAudioActive} />
+      {/* 3. Lưới ô vuông tương tác phủ toàn màn hình (Hover & Sóng nhạc nền biến đổi theo theme) */}
+      <InteractiveGrid isAudioActive={isAudioActive} theme={theme} />
 
-      {/* 4. Ánh sáng nền khuếch tán cực nhẹ (Chủ đạo trắng, điểm xuyết tím) */}
+      {/* 4. Ánh sáng nền khuếch tán cực nhẹ */}
       <div 
-        className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gradient-to-b from-white/10 via-violet-900/10 to-transparent blur-3xl pointer-events-none z-0" 
+        className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gradient-to-b from-[var(--text-accent)]/15 via-[var(--card-border)]/10 to-transparent blur-3xl pointer-events-none z-0 transition-all duration-500" 
         aria-hidden="true" 
       />
 
-      {/* Top Floating Action Bar (Nút Chia sẻ tối giản viền trắng) */}
-      <div className="w-full max-w-md mx-auto flex justify-end mb-4 relative z-20">
+      {/* Top Floating Action Bar (Nút Đổi Theme bên trái & Nút Chia sẻ bên phải) */}
+      <div className="w-full max-w-md mx-auto flex items-center justify-between mb-4 relative z-20">
+        <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} />
+
         <button
           onClick={handleShare}
-          className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-zinc-300 bg-zinc-950/90 border border-white/20 backdrop-blur-md hover:border-white/60 hover:text-white hover:bg-white/15 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all duration-300 cursor-pointer"
+          className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[var(--topbar-text)] bg-[var(--topbar-bg)] border border-[var(--topbar-border)] backdrop-blur-md hover:border-[var(--topbar-hover-border)] transition-all duration-300 cursor-pointer shadow-sm"
           title="Sao chép liên kết trang cá nhân"
         >
           {copiedLink ? (
             <>
               <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-white">Đã sao chép link</span>
+              <span>Đã sao chép link</span>
             </>
           ) : (
             <>
-              <Share2 className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white transition-colors" />
+              <Share2 className="w-3.5 h-3.5 text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors" />
               <span>Chia sẻ</span>
             </>
           )}
@@ -110,23 +124,23 @@ export default function App() {
           transition={{ duration: 0.5, delay: 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
           className="mt-2 w-full flex flex-col items-center"
         >
-          {/* Name với màu trắng sắc nét */}
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center justify-center gap-2">
+          {/* Name với màu sắc tương thích theme */}
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)] flex items-center justify-center gap-2">
             <span>{name}</span>
-            <span title="Xác minh hồ sơ" className="inline-flex text-violet-400">
-              <Sparkles className="w-4 h-4 fill-violet-400/20" />
+            <span title="Xác minh hồ sơ" className="inline-flex text-[var(--text-accent)]">
+              <Sparkles className="w-4 h-4 fill-current opacity-70" />
             </span>
           </h1>
 
           {/* Handle */}
           <div className="flex items-center justify-center mt-1">
-            <span className="text-sm font-medium text-violet-400">
+            <span className="text-sm font-medium text-[var(--text-accent)]">
               {handle}
             </span>
             {role && (
               <>
-                <span className="text-zinc-600 mx-2">•</span>
-                <span className="text-sm text-zinc-300 font-normal">
+                <span className="text-[var(--text-secondary)] mx-2">•</span>
+                <span className="text-sm text-[var(--text-secondary)] font-normal">
                   {role}
                 </span>
               </>
@@ -134,17 +148,17 @@ export default function App() {
           </div>
 
           {/* Bio text */}
-          <p className="mt-3.5 text-sm sm:text-[15px] leading-relaxed text-zinc-300 max-w-[42ch]">
+          <p className="mt-3.5 text-sm sm:text-[15px] leading-relaxed text-[var(--text-secondary)] max-w-[42ch]">
             {bio}
           </p>
 
-          {/* Tags / Pills phong cách đen trắng tối giản */}
+          {/* Tags / Pills */}
           {tags && tags.length > 0 && (
             <div className="flex flex-wrap items-center justify-center gap-2 mt-4 font-mono">
               {tags.map((tag, idx) => (
                 <span
                   key={`${tag}-${idx}`}
-                  className="px-3 py-1 text-xs font-medium rounded-lg bg-zinc-900/90 border border-white/15 text-zinc-300 hover:border-white/50 hover:text-white hover:bg-white/10 transition-all duration-300 shadow-sm"
+                  className="px-3 py-1 text-xs font-medium rounded-lg bg-[var(--pill-bg)] border border-[var(--pill-border)] text-[var(--pill-text)] hover:border-[var(--card-border-hover)] hover:text-[var(--text-primary)] transition-all duration-300 shadow-sm"
                 >
                   {tag}
                 </span>
@@ -153,8 +167,8 @@ export default function App() {
           )}
         </motion.div>
 
-        {/* Danh sách thẻ liên kết 3D Parallax */}
-        <div className="w-full mt-7 flex flex-col gap-3.5 pb-12">
+        {/* Social Links Cards Stack */}
+        <div className="w-full flex flex-col gap-3 mt-7">
           {socialLinks.map((link, index) => (
             <SocialCard key={link.id} link={link} index={index} />
           ))}

@@ -23,39 +23,46 @@ export default function Avatar({ src, alt, isStarted = true }) {
                 delay: i * 1.05,
                 ease: "easeOut",
               }}
-              className="absolute inset-5 rounded-full border border-white/25 pointer-events-none -z-10 group-hover:border-violet-400/40"
+              className="absolute inset-5 rounded-full border border-[var(--card-border)] pointer-events-none -z-10 group-hover:border-[var(--card-border-hover)]"
             />
           ))}
 
           {/* Hào quang khuếch tán êm ái phía sau Logo */}
           <div 
-            className="absolute inset-2 rounded-full bg-gradient-to-tr from-white/10 via-violet-600/15 to-transparent blur-2xl pointer-events-none -z-10" 
+            className="absolute inset-2 rounded-full bg-gradient-to-tr from-[var(--text-accent)]/15 via-[var(--card-border)]/20 to-transparent blur-2xl pointer-events-none -z-10" 
             aria-hidden="true" 
           />
         </>
       )}
 
       {/* 2. Khung Logo tròn lơ lửng với layoutId bay mượt mà từ màn hình Intro */}
-      <motion.div
-        layoutId="main-logo-container"
-        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-        whileHover={{ scale: 1.05 }}
-        className="relative p-1.5 rounded-full bg-[#111116] border border-white/25 shadow-[0_15px_35px_rgba(0,0,0,0.6),_0_0_25px_rgba(255,255,255,0.1)] backdrop-blur-xl transition-all duration-300 group-hover:border-white/60 group-hover:shadow-[0_20px_45px_rgba(0,0,0,0.7),_0_0_30px_rgba(255,255,255,0.2)]"
-      >
-        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-[#0d0d12] flex items-center justify-center">
-          <img
-            src={src}
-            alt={alt}
-            onLoad={() => setImageLoaded(true)}
-            className={`w-full h-full object-cover transition-all duration-700 ${
-              imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-            } group-hover:scale-105`}
-          />
-          {!imageLoaded && (
-            <div className="absolute inset-0 bg-zinc-900 animate-pulse rounded-full" />
-          )}
+      {isStarted ? (
+        <motion.div
+          layoutId="main-logo-container"
+          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+          whileHover={{ scale: 1.05 }}
+          className="relative p-1.5 rounded-full bg-[var(--card-bg)] border border-[var(--card-border)] shadow-[0_15px_35px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-all duration-300 group-hover:border-[var(--card-border-hover)]"
+        >
+          <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-[var(--icon-bg)] flex items-center justify-center">
+            <img
+              src={src}
+              alt={alt}
+              onLoad={() => setImageLoaded(true)}
+              className={`w-full h-full object-cover transition-all duration-700 ${
+                imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+              } group-hover:scale-105`}
+            />
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-zinc-900 animate-pulse rounded-full" />
+            )}
+          </div>
+        </motion.div>
+      ) : (
+        /* Giữ chỗ có kích thước tương đương để layout không bị xê dịch */
+        <div className="relative p-1.5 rounded-full opacity-0 pointer-events-none">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full" />
         </div>
-      </motion.div>
+      )}
     </div>
   );
 }

@@ -126,7 +126,7 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
       {/* Floating Audio Controller in Main UI */}
       {isStarted && (
         <div 
-          className="fixed bottom-5 right-5 z-40 flex items-center gap-2 p-2 rounded-2xl bg-zinc-950/80 border border-white/20 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.8),_0_0_20px_rgba(255,255,255,0.08)] transition-all duration-300"
+          className="fixed bottom-5 right-5 z-40 flex items-center gap-2 p-2 rounded-2xl bg-[var(--card-bg)] border border-[var(--topbar-border)] backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-all duration-300"
           onMouseEnter={() => setShowVolumeSlider(true)}
           onMouseLeave={() => setShowVolumeSlider(false)}
         >
@@ -135,7 +135,7 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
             {[0.4, 0.8, 0.5, 1, 0.6].map((scale, i) => (
               <span
                 key={i}
-                className="w-0.5 rounded-full bg-white transition-all duration-300"
+                className="w-0.5 rounded-full bg-[var(--text-primary)] transition-all duration-300"
                 style={{
                   height: isPlaying ? `${Math.max(6, scale * 18)}px` : '4px',
                   opacity: isPlaying ? 0.9 : 0.4,
@@ -149,12 +149,12 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
           <button
             onClick={togglePlay}
             title={isPlaying ? "Tạm dừng nhạc" : "Phát nhạc"}
-            className="flex items-center justify-center w-8 h-8 rounded-xl bg-white text-black hover:bg-zinc-200 active:scale-95 transition-all duration-200"
+            className="flex items-center justify-center w-8 h-8 rounded-xl bg-[var(--text-primary)] text-[var(--bg-color)] hover:opacity-90 active:scale-95 transition-all duration-200 cursor-pointer"
           >
             {isPlaying ? (
-              <Pause className="w-3.5 h-3.5 fill-black" />
+              <Pause className="w-3.5 h-3.5 fill-current" />
             ) : (
-              <Play className="w-3.5 h-3.5 fill-black ml-0.5" />
+              <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
             )}
           </button>
 
@@ -162,10 +162,10 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
           <button
             onClick={toggleMute}
             title={isMuted ? "Bật âm thanh" : "Tắt tiếng"}
-            className="flex items-center justify-center w-8 h-8 rounded-xl bg-zinc-900 border border-white/10 text-white hover:border-white/30 hover:bg-zinc-800 transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-xl bg-[var(--icon-bg)] border border-[var(--icon-border)] text-[var(--icon-text)] hover:border-[var(--topbar-hover-border)] transition-colors cursor-pointer"
           >
             {isMuted || volume === 0 ? (
-              <VolumeX className="w-4 h-4 text-zinc-400" />
+              <VolumeX className="w-4 h-4 text-[var(--text-secondary)]" />
             ) : (
               <Volume2 className="w-4 h-4" />
             )}
@@ -183,7 +183,7 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
               max="100"
               value={isMuted ? 0 : volume}
               onChange={handleVolumeChange}
-              className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-white"
+              className="w-full h-1 bg-[var(--pill-bg)] rounded-lg appearance-none cursor-pointer accent-[var(--text-accent)]"
             />
           </div>
         </div>
