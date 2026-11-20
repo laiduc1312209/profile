@@ -23,7 +23,7 @@ export default function ThemeSwitcher({ currentTheme, onThemeChange }) {
     <button
       type="button"
       onClick={handleNextTheme}
-      title={`Theme hiện tại: ${activeThemeObj.label} (Nhấp để đổi)`}
+      title={`Current theme: ${activeThemeObj.label} (Click to switch)`}
       className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[var(--topbar-text)] bg-[var(--topbar-bg)] border border-[var(--topbar-border)] backdrop-blur-md hover:border-[var(--topbar-hover-border)] transition-all duration-300 cursor-pointer shadow-sm active:scale-95"
     >
       <motion.div

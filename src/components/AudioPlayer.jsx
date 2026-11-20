@@ -148,7 +148,7 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
           {/* Play/Pause Button */}
           <button
             onClick={togglePlay}
-            title={isPlaying ? "Tạm dừng nhạc" : "Phát nhạc"}
+            title={isPlaying ? "Pause music" : "Play music"}
             className="flex items-center justify-center w-8 h-8 rounded-xl bg-[var(--text-primary)] text-[var(--bg-color)] hover:opacity-90 active:scale-95 transition-all duration-200 cursor-pointer"
           >
             {isPlaying ? (
@@ -161,7 +161,7 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
           {/* Volume Button */}
           <button
             onClick={toggleMute}
-            title={isMuted ? "Bật âm thanh" : "Tắt tiếng"}
+            title={isMuted ? "Unmute" : "Mute"}
             className="flex items-center justify-center w-8 h-8 rounded-xl bg-[var(--icon-bg)] border border-[var(--icon-border)] text-[var(--icon-text)] hover:border-[var(--topbar-hover-border)] transition-colors cursor-pointer"
           >
             {isMuted || volume === 0 ? (

@@ -172,7 +172,7 @@ export default function SocialCard({ link, index }) {
               <button
                 type="button"
                 onClick={handleCopy}
-                title={link.id === 'discord' ? "Sao chép username Discord" : "Sao chép địa chỉ email"}
+                title={link.id === 'discord' ? "Copy Discord username" : "Copy email address"}
                 className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] border border-transparent hover:border-[var(--icon-border)] active:scale-95 transition-all duration-200"
               >
                 {copied ? (

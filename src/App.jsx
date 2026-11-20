@@ -6,6 +6,8 @@ import SocialCard from './components/SocialCard';
 import InteractiveGrid from './components/InteractiveGrid';
 import AudioPlayer from './components/AudioPlayer';
 import ThemeSwitcher from './components/ThemeSwitcher';
+import DiscordProfileCard from './components/DiscordProfileCard';
+import GithubProfileCard from './components/GithubProfileCard';
 import { Share2, Check, Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -90,30 +92,30 @@ export default function App() {
       />
 
       {/* Top Floating Action Bar (Nút Đổi Theme bên trái & Nút Chia sẻ bên phải) */}
-      <div className="w-full max-w-md mx-auto flex items-center justify-between mb-4 relative z-20">
+      <div className="w-full max-w-lg mx-auto flex items-center justify-between mb-4 relative z-20">
         <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} />
 
         <button
           onClick={handleShare}
           className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[var(--topbar-text)] bg-[var(--topbar-bg)] border border-[var(--topbar-border)] backdrop-blur-md hover:border-[var(--topbar-hover-border)] transition-all duration-300 cursor-pointer shadow-sm"
-          title="Sao chép liên kết trang cá nhân"
+          title="Copy profile link"
         >
           {copiedLink ? (
             <>
               <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Đã sao chép link</span>
+              <span>Link copied</span>
             </>
           ) : (
             <>
               <Share2 className="w-3.5 h-3.5 text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors" />
-              <span>Chia sẻ</span>
+              <span>Share</span>
             </>
           )}
         </button>
       </div>
 
       {/* Main Container */}
-      <main className="w-full max-w-md mx-auto flex flex-col items-center text-center relative z-10">
+      <main className="w-full max-w-lg mx-auto flex flex-col items-center text-center relative z-10 px-1">
         {/* Profile Avatar với hiệu ứng gợn sóng lan tỏa & bay vào từ Intro */}
         <Avatar src={avatar} alt={name} isStarted={isStarted} />
 
@@ -127,7 +129,7 @@ export default function App() {
           {/* Name với màu sắc tương thích theme */}
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)] flex items-center justify-center gap-2">
             <span>{name}</span>
-            <span title="Xác minh hồ sơ" className="inline-flex text-[var(--text-accent)]">
+            <span title="Verified profile" className="inline-flex text-[var(--text-accent)]">
               <Sparkles className="w-4 h-4 fill-current opacity-70" />
             </span>
           </h1>
@@ -174,6 +176,24 @@ export default function App() {
           ))}
         </div>
       </main>
+
+      {/* Profile Details: Discord & GitHub side-by-side on desktop */}
+      <section className="w-full max-w-5xl mx-auto mt-12 pt-6 flex flex-col items-center relative z-10 px-2 sm:px-4">
+        {/* Subtle Divider */}
+        <div className="w-full max-w-md mx-auto flex items-center gap-3 mb-8">
+          <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-[var(--topbar-border)] to-[var(--topbar-border)]" />
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)]">
+            Profile Details
+          </span>
+          <div className="flex-1 h-[1px] bg-gradient-to-l from-transparent via-[var(--topbar-border)] to-[var(--topbar-border)]" />
+        </div>
+
+        {/* Side-by-side grid: Discord & GitHub */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-start justify-items-center">
+          <DiscordProfileCard userId="1008681119669030973" />
+          <GithubProfileCard username="laiduc1312209" />
+        </div>
+      </section>
     </div>
   );
 }
