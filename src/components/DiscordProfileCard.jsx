@@ -621,19 +621,30 @@ export default function DiscordProfileCard({ userId = "1008681119669030973" }) {
 
           {/* ========================================================
               3. HOẠT ẢNH HỒ SƠ DISCORD THE TOWER (ĐƯỢC ĐẶT LÊN TRƯỚC HẾT - ON TOP)
-              (Chỉ chạy khi hover lần đầu và chỉ chạy 1 lần duy nhất trong 3s)
+              (Loop chạy liên tục; hiệu ứng sấm sét toà tháp chỉ chạy khi hover lần đầu và dừng)
              ======================================================== */}
           <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-40">
+            {/* Hoạt ảnh Loop tuần hoàn liên tục của Discord (36 Frames APNG) */}
+            <img
+              src="/discord-effects/tower-loop.png"
+              alt="The Tower Profile Effect Loop"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none scale-[1.02] mix-blend-screen opacity-90"
+              onError={(e) => {
+                e.target.src = "https://cdn.discordapp.com/assets/content/36f808751fef4eee301e519ba9c7fb6ff25849d065768e6195ed73a157c6d28f";
+              }}
+            />
+
+            {/* Hoạt ảnh sấm sét toà tháp (The Tower Strike): chỉ chạy khi hover lần đầu và chỉ chạy 1 lần duy nhất */}
             <AnimatePresence>
               {isPlayingEffect && (
                 <motion.img
-                  key="tower-effect-anim"
+                  key="tower-strike-anim"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.35 }}
                   src="/discord-effects/tower-intro.png"
-                  alt="The Tower Profile Effect"
+                  alt="The Tower Profile Effect Strike"
                   className="absolute inset-0 w-full h-full object-cover pointer-events-none scale-[1.02] mix-blend-screen"
                   onError={(e) => {
                     e.target.src = "https://cdn.discordapp.com/assets/content/f2bf0af559f9c49ba2c293d3b165e1ffb8bee560123d7ccb304df9998d850bb4";
