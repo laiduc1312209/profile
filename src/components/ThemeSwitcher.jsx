@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 import { Moon, Sun, Sparkles, Palette } from 'lucide-react';
 
 export const THEMES = [
+  { id: 'light', label: 'Light', icon: Sun },
   { id: 'violet-dark', label: 'Violet Dark', icon: Sparkles },
   { id: 'dark', label: 'Dark', icon: Moon },
-  { id: 'light', label: 'Light', icon: Sun },
   { id: 'violet-light', label: 'Violet Light', icon: Palette },
 ];
 

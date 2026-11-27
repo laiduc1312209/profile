@@ -1,6 +1,30 @@
 @import "tailwindcss";
 
-:root, [data-theme="violet-dark"] {
+:root, [data-theme="light"] {
+  --bg-color: #f8fafc;
+  --text-primary: #09090b;
+  --text-secondary: #64748b;
+  --text-accent: #7c3aed;
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --card-border: rgba(0, 0, 0, 0.15);
+  --card-border-hover: rgba(0, 0, 0, 0.8);
+  --card-glow: rgba(0, 0, 0, 0.06);
+  --card-sheen: rgba(0, 0, 0, 0.1);
+  --icon-bg: #f1f5f9;
+  --icon-text: #0f172a;
+  --icon-border: rgba(0, 0, 0, 0.12);
+  --pill-bg: rgba(241, 245, 249, 0.9);
+  --pill-border: rgba(0, 0, 0, 0.12);
+  --pill-text: #334155;
+  --topbar-bg: rgba(255, 255, 255, 0.85);
+  --topbar-border: rgba(0, 0, 0, 0.15);
+  --topbar-text: #334155;
+  --topbar-hover-border: rgba(0, 0, 0, 0.6);
+  --scrollbar-track: #f8fafc;
+  --scrollbar-thumb: #cbd5e1;
+}
+
+[data-theme="violet-dark"] {
   --bg-color: #090514;
   --text-primary: #faf5ff;
   --text-secondary: #c084fc;
@@ -48,29 +72,6 @@
   --scrollbar-thumb: #27272a;
 }
 
-[data-theme="light"] {
-  --bg-color: #f8fafc;
-  --text-primary: #09090b;
-  --text-secondary: #64748b;
-  --text-accent: #7c3aed;
-  --card-bg: rgba(255, 255, 255, 0.92);
-  --card-border: rgba(0, 0, 0, 0.15);
-  --card-border-hover: rgba(0, 0, 0, 0.8);
-  --card-glow: rgba(0, 0, 0, 0.06);
-  --card-sheen: rgba(0, 0, 0, 0.1);
-  --icon-bg: #f1f5f9;
-  --icon-text: #0f172a;
-  --icon-border: rgba(0, 0, 0, 0.12);
-  --pill-bg: rgba(241, 245, 249, 0.9);
-  --pill-border: rgba(0, 0, 0, 0.12);
-  --pill-text: #334155;
-  --topbar-bg: rgba(255, 255, 255, 0.85);
-  --topbar-border: rgba(0, 0, 0, 0.15);
-  --topbar-text: #334155;
-  --topbar-hover-border: rgba(0, 0, 0, 0.6);
-  --scrollbar-track: #f8fafc;
-  --scrollbar-thumb: #cbd5e1;
-}
 
 [data-theme="violet-light"] {
   --bg-color: #faf5ff;

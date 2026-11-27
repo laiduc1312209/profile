@@ -8,7 +8,7 @@ import AudioPlayer from './components/AudioPlayer';
 import ThemeSwitcher from './components/ThemeSwitcher';
 import DiscordProfileCard from './components/DiscordProfileCard';
 import GithubProfileCard from './components/GithubProfileCard';
-import { Share2, Check, Sparkles } from 'lucide-react';
+import { Share2, Check, Sparkles, Eye, Star } from 'lucide-react';
 
 export default function App() {
   const { name, handle, role, bio, avatar, tags, socialLinks } = profileConfig;
@@ -16,8 +16,108 @@ export default function App() {
   const [isStarted, setIsStarted] = useState(false);
   const [isAudioActive, setIsAudioActive] = useState(false);
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('user-theme') || 'violet-dark';
+    return localStorage.getItem('user-theme') || 'light';
   });
+
+  // Real Global Counter API (Abacus Cloud)
+  const API_NAMESPACE = 'laiduc1312209-profile';
+  const baseViews = profileConfig.stats?.initialViews || 0;
+  const baseStars = profileConfig.stats?.initialStars || 0;
+
+  const [views, setViews] = useState(() => {
+    const saved = localStorage.getItem('profile-views');
+    const count = saved ? parseInt(saved, 10) : baseViews;
+    return isNaN(count) ? baseViews : count;
+  });
+
+  const [hasStarred, setHasStarred] = useState(() => {
+    return localStorage.getItem('profile-starred') === 'true';
+  });
+
+  const [stars, setStars] = useState(() => {
+    const savedCount = localStorage.getItem('profile-stars-count');
+    const base = savedCount ? parseInt(savedCount, 10) : baseStars;
+    return isNaN(base) ? baseStars : base;
+  });
+
+  // 1. Fetch & tăng lượt View thật toàn cầu (đồng bộ mọi thiết bị)
+  useEffect(() => {
+    let isMounted = true;
+    const hasCountedSession = sessionStorage.getItem('profile-session-viewed');
+    const endpoint = hasCountedSession
+      ? `https://abacus.jasoncameron.dev/get/${API_NAMESPACE}/views`
+      : `https://abacus.jasoncameron.dev/hit/${API_NAMESPACE}/views`;
+
+    fetch(endpoint)
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted && data && typeof data.value === 'number') {
+          const total = baseViews + data.value;
+          setViews(total);
+          localStorage.setItem('profile-views', total.toString());
+          sessionStorage.setItem('profile-session-viewed', 'true');
+        }
+      })
+      .catch(() => {
+        // Fallback tự tăng local nếu mất mạng
+        if (!hasCountedSession) {
+          setViews((prev) => {
+            const next = prev + 1;
+            localStorage.setItem('profile-views', next.toString());
+            sessionStorage.setItem('profile-session-viewed', 'true');
+            return next;
+          });
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [baseViews]);
+
+  // 2. Fetch số lượng Star thật toàn cầu từ database
+  useEffect(() => {
+    let isMounted = true;
+    fetch(`https://abacus.jasoncameron.dev/get/${API_NAMESPACE}/stars`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted && data && typeof data.value === 'number') {
+          const total = baseStars + data.value;
+          setStars(total);
+          localStorage.setItem('profile-stars-count', total.toString());
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      isMounted = false;
+    };
+  }, [baseStars]);
+
+  // 3. Xử lý khi người dùng ấn nút Star
+  const handleStar = async () => {
+    if (hasStarred) return; // Ấn rồi thì không thể bỏ
+    setHasStarred(true);
+    localStorage.setItem('profile-starred', 'true');
+    setStars((prev) => {
+      const next = prev + 1;
+      localStorage.setItem('profile-stars-count', next.toString());
+      return next;
+    });
+
+    // Đồng bộ lên database toàn cầu
+    try {
+      const res = await fetch(`https://abacus.jasoncameron.dev/hit/${API_NAMESPACE}/stars`);
+      const data = await res.json();
+      if (data && typeof data.value === 'number') {
+        const total = baseStars + data.value;
+        setStars(total);
+        localStorage.setItem('profile-stars-count', total.toString());
+      }
+    } catch {
+      // Giữ giá trị local đã tăng
+    }
+  };
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -91,27 +191,61 @@ export default function App() {
         aria-hidden="true" 
       />
 
-      {/* Top Floating Action Bar (Nút Đổi Theme bên trái & Nút Chia sẻ bên phải) */}
-      <div className="w-full max-w-lg mx-auto flex items-center justify-between mb-4 relative z-20">
+      {/* Top Floating Action Bar (Theme Switcher, Views, Star & Share) */}
+      <div className="w-full max-w-lg mx-auto flex items-center justify-between gap-2 mb-4 relative z-20">
         <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} />
 
-        <button
-          onClick={handleShare}
-          className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[var(--topbar-text)] bg-[var(--topbar-bg)] border border-[var(--topbar-border)] backdrop-blur-md hover:border-[var(--topbar-hover-border)] transition-all duration-300 cursor-pointer shadow-sm"
-          title="Copy profile link"
-        >
-          {copiedLink ? (
-            <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Link copied</span>
-            </>
-          ) : (
-            <>
-              <Share2 className="w-3.5 h-3.5 text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors" />
-              <span>Share</span>
-            </>
-          )}
-        </button>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Lượt mắt xem (Views) */}
+          <div 
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-mono text-[var(--topbar-text)] bg-[var(--topbar-bg)] border border-[var(--topbar-border)] backdrop-blur-md shadow-sm select-none"
+            title="Profile views"
+          >
+            <Eye className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
+            <span>{views.toLocaleString()}</span>
+          </div>
+
+          {/* Nút Star (Ấn tô vàng & +1, ấn rồi không thể bỏ) */}
+          <button
+            type="button"
+            onClick={handleStar}
+            disabled={hasStarred}
+            title={hasStarred ? "You starred this profile" : "Star this profile"}
+            className={`group inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-mono font-medium backdrop-blur-md border transition-all duration-300 shadow-sm ${
+              hasStarred 
+                ? 'bg-amber-400/15 border-amber-400/40 text-amber-500 cursor-default' 
+                : 'bg-[var(--topbar-bg)] border-[var(--topbar-border)] text-[var(--topbar-text)] hover:border-amber-400/60 hover:text-amber-500 cursor-pointer active:scale-95'
+            }`}
+          >
+            <Star 
+              className={`w-3.5 h-3.5 transition-all duration-300 ${
+                hasStarred 
+                  ? 'fill-amber-400 text-amber-400 scale-110 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]' 
+                  : 'text-[var(--text-secondary)] group-hover:text-amber-400'
+              }`} 
+            />
+            <span>{stars.toLocaleString()}</span>
+          </button>
+
+          {/* Nút Chia sẻ */}
+          <button
+            onClick={handleShare}
+            className="group relative inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-medium text-[var(--topbar-text)] bg-[var(--topbar-bg)] border border-[var(--topbar-border)] backdrop-blur-md hover:border-[var(--topbar-hover-border)] transition-all duration-300 cursor-pointer shadow-sm active:scale-95"
+            title="Copy profile link"
+          >
+            {copiedLink ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="hidden sm:inline">Link copied</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-3.5 h-3.5 text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors" />
+                <span className="hidden sm:inline">Share</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Main Container */}

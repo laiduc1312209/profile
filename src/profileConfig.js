@@ -22,6 +22,12 @@ export const profileConfig = {
   },
   youtubeMusicId: "7ajECaMrLCM",
 
+  // Profile stats
+  stats: {
+    initialViews: 1420,
+    initialStars: 348,
+  },
+
   // Current status
   status: {
     available: true,

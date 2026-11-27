@@ -43,7 +43,7 @@ const themeConfigs = {
   },
 };
 
-export default function InteractiveGrid({ isAudioActive = false, theme = 'dark' }) {
+export default function InteractiveGrid({ isAudioActive = false, theme = 'light' }) {
   const canvasRef = useRef(null);
   const isAudioActiveRef = useRef(isAudioActive);
   const themeRef = useRef(theme);
