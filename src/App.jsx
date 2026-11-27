@@ -27,6 +27,7 @@ export default function App() {
   const [views, setViews] = useState(() => {
     const saved = localStorage.getItem('profile-views');
     const count = saved ? parseInt(saved, 10) : baseViews;
+    if (baseViews === 0 && count >= 1000) return 0;
     return isNaN(count) ? baseViews : count;
   });
 
@@ -37,6 +38,7 @@ export default function App() {
   const [stars, setStars] = useState(() => {
     const savedCount = localStorage.getItem('profile-stars-count');
     const base = savedCount ? parseInt(savedCount, 10) : baseStars;
+    if (baseStars === 0 && base >= 300) return 0;
     return isNaN(base) ? baseStars : base;
   });
 

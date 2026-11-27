@@ -22,10 +22,10 @@ export const profileConfig = {
   },
   youtubeMusicId: "7ajECaMrLCM",
 
-  // Profile stats
+  // Profile stats (Bắt đầu từ 0)
   stats: {
-    initialViews: 1420,
-    initialStars: 348,
+    initialViews: 0,
+    initialStars: 0,
   },
 
   // Current status
