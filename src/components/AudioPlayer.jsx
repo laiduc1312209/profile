@@ -9,6 +9,13 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const playerRef = useRef(null);
 
+  const musicInfo = profileConfig.music || {
+    youtubeId: profileConfig.youtubeMusicId || '7ajECaMrLCM',
+    title: 'Xe Đạp',
+    artist: 'Thùy Chi ft. M4U',
+    cover: 'https://i.ytimg.com/vi/7ajECaMrLCM/maxresdefault.jpg',
+  };
+
   // Báo cáo trạng thái phát nhạc ra ngoài component cha (App.jsx)
   useEffect(() => {
     if (onAudioStateChange) {
@@ -35,7 +42,13 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
   useEffect(() => {
     if (!isStarted) return;
 
-    const videoId = profileConfig.youtubeMusicId || 'bbdsIR4UHDg';
+    const musicInfo = profileConfig.music || {
+      youtubeId: profileConfig.youtubeMusicId || '7ajECaMrLCM',
+      title: 'Xe Đạp',
+      artist: 'Thùy Chi ft. M4U',
+      cover: 'https://i.ytimg.com/vi/7ajECaMrLCM/maxresdefault.jpg',
+    };
+    const videoId = musicInfo.youtubeId || profileConfig.youtubeMusicId || '7ajECaMrLCM';
 
     const startAudio = () => {
       if (window.YT && window.YT.Player) {
@@ -126,19 +139,53 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
       {/* Floating Audio Controller in Main UI */}
       {isStarted && (
         <div 
-          className="fixed bottom-5 right-5 z-40 flex items-center gap-2 p-2 rounded-2xl bg-[var(--card-bg)] border border-[var(--topbar-border)] backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-all duration-300"
+          className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5 p-2 pr-3 rounded-2xl bg-[var(--card-bg)] border border-[var(--topbar-border)] backdrop-blur-xl shadow-[0_12px_36px_rgba(0,0,0,0.35)] transition-all duration-300 max-w-[calc(100vw-2.5rem)]"
           onMouseEnter={() => setShowVolumeSlider(true)}
           onMouseLeave={() => setShowVolumeSlider(false)}
         >
+          {/* Banner / Cover Art */}
+          <div className="relative flex-shrink-0 w-10 h-10 rounded-xl overflow-hidden border border-[var(--topbar-border)] bg-zinc-900 shadow-inner group/cover">
+            <img 
+              src={musicInfo.cover} 
+              alt={musicInfo.title}
+              className={`w-full h-full object-cover transition-all duration-700 ${isPlaying ? 'scale-105' : 'scale-100 opacity-70 grayscale-[30%]'}`}
+              onError={(e) => {
+                e.target.src = `https://i.ytimg.com/vi/${musicInfo.youtubeId}/hqdefault.jpg`;
+              }}
+            />
+            {/* Live Indicator Icon overlay when playing */}
+            {isPlaying && (
+              <div className="absolute inset-0 bg-black/25 backdrop-blur-[0.5px] flex items-center justify-center pointer-events-none">
+                <Music className="w-3.5 h-3.5 text-white/90 animate-pulse drop-shadow" />
+              </div>
+            )}
+          </div>
+
+          {/* Song Info (Tên bài hát & Tác giả) */}
+          <div className="flex flex-col min-w-0 text-left justify-center max-w-[110px] sm:max-w-[150px]">
+            <span 
+              className="font-semibold text-xs text-[var(--text-primary)] truncate leading-tight tracking-tight"
+              title={musicInfo.title}
+            >
+              {musicInfo.title}
+            </span>
+            <span 
+              className="text-[11px] text-[var(--text-secondary)] truncate leading-tight mt-0.5 font-normal"
+              title={musicInfo.artist}
+            >
+              {musicInfo.artist}
+            </span>
+          </div>
+
           {/* Animated Equalizer Waves */}
-          <div className="flex items-center gap-0.5 px-2 py-1">
+          <div className="flex items-center gap-0.5 px-1 py-1 flex-shrink-0">
             {[0.4, 0.8, 0.5, 1, 0.6].map((scale, i) => (
               <span
                 key={i}
                 className="w-0.5 rounded-full bg-[var(--text-primary)] transition-all duration-300"
                 style={{
-                  height: isPlaying ? `${Math.max(6, scale * 18)}px` : '4px',
-                  opacity: isPlaying ? 0.9 : 0.4,
+                  height: isPlaying ? `${Math.max(6, scale * 16)}px` : '4px',
+                  opacity: isPlaying ? 0.9 : 0.35,
                   animation: isPlaying ? `pulse 0.8s ease-in-out infinite alternate ${i * 0.15}s` : 'none',
                 }}
               />
@@ -149,7 +196,7 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
           <button
             onClick={togglePlay}
             title={isPlaying ? "Pause music" : "Play music"}
-            className="flex items-center justify-center w-8 h-8 rounded-xl bg-[var(--text-primary)] text-[var(--bg-color)] hover:opacity-90 active:scale-95 transition-all duration-200 cursor-pointer"
+            className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-xl bg-[var(--text-primary)] text-[var(--bg-color)] hover:opacity-90 active:scale-95 transition-all duration-200 cursor-pointer shadow-sm"
           >
             {isPlaying ? (
               <Pause className="w-3.5 h-3.5 fill-current" />
@@ -162,7 +209,7 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
           <button
             onClick={toggleMute}
             title={isMuted ? "Unmute" : "Mute"}
-            className="flex items-center justify-center w-8 h-8 rounded-xl bg-[var(--icon-bg)] border border-[var(--icon-border)] text-[var(--icon-text)] hover:border-[var(--topbar-hover-border)] transition-colors cursor-pointer"
+            className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-xl bg-[var(--icon-bg)] border border-[var(--icon-border)] text-[var(--icon-text)] hover:border-[var(--topbar-hover-border)] transition-colors cursor-pointer"
           >
             {isMuted || volume === 0 ? (
               <VolumeX className="w-4 h-4 text-[var(--text-secondary)]" />
@@ -174,7 +221,7 @@ export default function AudioPlayer({ isStarted, onAudioStateChange }) {
           {/* Expandable Volume Slider */}
           <div 
             className={`overflow-hidden transition-all duration-300 flex items-center ${
-              showVolumeSlider ? 'w-20 opacity-100 pr-2' : 'w-0 opacity-0'
+              showVolumeSlider ? 'w-16 sm:w-20 opacity-100 pr-1' : 'w-0 opacity-0'
             }`}
           >
             <input

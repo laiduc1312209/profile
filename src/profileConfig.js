@@ -13,8 +13,14 @@ export const profileConfig = {
   // Avatar / Logo: Stored in public/logo.png
   avatar: "/logo.png",
 
-  // YouTube background music (Song ID: https://www.youtube.com/watch?v=bbdsIR4UHDg)
-  youtubeMusicId: "bbdsIR4UHDg",
+  // YouTube background music (Song: Xe Đạp - Thùy Chi ft. M4U)
+  music: {
+    youtubeId: "7ajECaMrLCM",
+    title: "Xe Đạp",
+    artist: "Thùy Chi ft. M4U",
+    cover: "https://i.ytimg.com/vi/7ajECaMrLCM/maxresdefault.jpg",
+  },
+  youtubeMusicId: "7ajECaMrLCM",
 
   // Current status
   status: {
